@@ -12,9 +12,11 @@ dependencies:
     - docker build -t gaiaadm/data-faker .
 test:
   override:
-    #- docker run -d -p 8083:8083 -p 8086:8086 -e PRE_CREATE_DB="db1" --name influxdb tutum/influxdb
-    #- docker run -d --link rabbitmq:rabbitmq --link influxdb:influxdb gaiaadm/event-indexer:$BUILD_TAG; sleep 10
-    #- curl -G 'http://localhost:8086/db/db1/series?u=root&p=root' --data-urlencode "q=select * from agm_storypoints limit 1" | grep "new_val"
+    - docker run -d -p 8083:8083 -p 8086:8086 -e PRE_CREATE_DB="db1" --name influxdb tutum/influxdb
+    - docker run -d -p 8080:8080 -p 8081:8081 --link influxdb:influxdb --name faker gaiaadm/data-faker:$BUILD_TAG
+    - curl -H "Content-Type: application/json" -X POST -d '[{"name":"my_time_series","points":[[{{time}},"{{status}}"]],"columns":["time", "status"]}]' 'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'
+    - sleep 10
+    - curl -G 'http://localhost:8086/db/db1/series?u=root&p=root' --data-urlencode "q=select * from my_time_series limit 1" | grep "status"
 deployment:
   hub:
     branch: master
