@@ -13,9 +13,8 @@ dependencies:
 test:
   override:
     - docker run -d -p 8083:8083 -p 8086:8086 -e PRE_CREATE_DB="db1" --name influxdb tutum/influxdb
-    - docker run -d -p 8080:8080 -p 8081:8081 --link influxdb:influxdb --name faker gaiaadm/data-faker:$BUILD_TAG
-    - curl -X POST 'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'
-    - sleep 10
+    - docker run -d -p 8080:8080 -p 8081:8081 --link influxdb:influxdb --name faker gaiaadm/data-faker:$BUILD_TAG; sleep 10
+    - curl -X POST 'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'; sleep 10
     - curl -G 'http://localhost:8086/db/db1/series?u=root&p=root' --data-urlencode "q=select * from my_time_series limit 1" | grep "status"
 deployment:
   hub:
