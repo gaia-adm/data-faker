@@ -1,14 +1,11 @@
 package adm.gaia.data.faker.rabbitmq;
 
 import adm.gaia.data.faker.DataFakerConfiguration;
-import adm.gaia.data.faker.facking.MessagePublisher;
-import adm.gaia.data.faker.facking.Scope;
+import adm.gaia.data.faker.faking.MessagePublisher;
 import com.rabbitmq.client.*;
-import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;

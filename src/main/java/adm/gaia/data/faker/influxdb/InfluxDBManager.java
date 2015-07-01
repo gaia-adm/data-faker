@@ -1,7 +1,7 @@
 package adm.gaia.data.faker.influxdb;
 
 import adm.gaia.data.faker.DataFakerConfiguration;
-import adm.gaia.data.faker.facking.MessagePublisher;
+import adm.gaia.data.faker.faking.MessagePublisher;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.setup.Environment;

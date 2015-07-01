@@ -1,21 +1,14 @@
-package adm.gaia.data.faker.facking;
+package adm.gaia.data.faker.faking;
 
 import adm.gaia.data.faker.DataFakerConfiguration;
-import adm.gaia.data.faker.facking.Scope;
-import adm.gaia.data.faker.influxdb.InfluxDBManager;
-import adm.gaia.data.faker.rabbitmq.RabbitmqManager;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
 import io.dropwizard.setup.Environment;
 
 import javax.ws.rs.*;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by tsadok on 01/07/2015.

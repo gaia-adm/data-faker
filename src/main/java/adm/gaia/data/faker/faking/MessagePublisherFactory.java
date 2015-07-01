@@ -1,4 +1,4 @@
-package adm.gaia.data.faker.facking;
+package adm.gaia.data.faker.faking;
 
 import adm.gaia.data.faker.influxdb.InfluxDBManager;
 import adm.gaia.data.faker.rabbitmq.RabbitmqManager;

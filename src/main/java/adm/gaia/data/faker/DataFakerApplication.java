@@ -1,6 +1,6 @@
 package adm.gaia.data.faker;
 
-import adm.gaia.data.faker.facking.DataFakerResource;
+import adm.gaia.data.faker.faking.DataFakerResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;

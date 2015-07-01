@@ -1,4 +1,4 @@
-package adm.gaia.data.faker.facking;
+package adm.gaia.data.faker.faking;
 
 import java.util.Random;
 
