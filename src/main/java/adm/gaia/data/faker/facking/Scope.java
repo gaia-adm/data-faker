@@ -1,6 +1,5 @@
 package adm.gaia.data.faker.facking;
 
-import java.util.DoubleSummaryStatistics;
 import java.util.Random;
 
 /**
