@@ -1,0 +1,26 @@
+machine:
+  services:
+    - docker
+dependencies:
+  override:
+    - cp Dockerfile Dockerfile.run
+    - cp Dockerfile.build Dockerfile
+    - docker build -t build-img .
+    - docker create --name build-cont build-img
+    - docker cp build-cont:/usr/local/gaia/target/data-faker-1.0-SNAPSHOT.jar ./target
+    - cp Dockerfile.run Dockerfile
+    - docker build -t gaiaadm/data-faker .
+test:
+  override:
+    #- docker run -d -p 8083:8083 -p 8086:8086 -e PRE_CREATE_DB="db1" --name influxdb tutum/influxdb
+    #- docker run -d --link rabbitmq:rabbitmq --link influxdb:influxdb gaiaadm/event-indexer:$BUILD_TAG; sleep 10
+    #- curl -G 'http://localhost:8086/db/db1/series?u=root&p=root' --data-urlencode "q=select * from agm_storypoints limit 1" | grep "new_val"
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push gaiaadm/data-faker
+general:
+  artifacts:
+    - target/data-faker-1.0-SNAPSHOT.jar
