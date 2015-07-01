@@ -7,7 +7,8 @@ Usage
 =====
 
 This service was built using [dropwizard](https://dropwizard.github.io/dropwizard/index.html)
-It exposes a single REST endpoint "fake-data", that accepts json template body with [mustache](https://github.com/spullara/mustache.java) parameters.
+It exposes a single REST endpoint "fake-data", that accepts json template body with [mustache](https://github.com/spullara/mustache.java) parameters, then it parse the template replacing mustache parameters 
+with real values and send the result to the endpoint supplied by "sendto" query param.
 
 Supported __mustache parameters__:
 
