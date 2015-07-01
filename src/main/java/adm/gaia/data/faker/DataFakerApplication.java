@@ -1,6 +1,6 @@
 package adm.gaia.data.faker;
 
-import adm.gaia.data.faker.rabbitmq.RabbitmqManager;
+import adm.gaia.data.faker.facking.DataFakerResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -29,7 +29,7 @@ public class DataFakerApplication extends Application<DataFakerConfiguration>{
     public void run(DataFakerConfiguration configuration,
                     Environment environment)  throws Exception
     {
-        environment.jersey().register(new DataFakerResource(configuration));
+        environment.jersey().register(new DataFakerResource(configuration, environment));
     }
 }
 

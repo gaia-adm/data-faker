@@ -1,12 +1,15 @@
-package adm.gaia.data.faker;
+package adm.gaia.data.faker.facking;
 
+import adm.gaia.data.faker.DataFakerConfiguration;
 import adm.gaia.data.faker.facking.Scope;
+import adm.gaia.data.faker.influxdb.InfluxDBManager;
 import adm.gaia.data.faker.rabbitmq.RabbitmqManager;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
+import io.dropwizard.setup.Environment;
 
 import javax.ws.rs.*;
 import java.io.StringReader;
@@ -21,28 +24,33 @@ import java.util.Map;
 public class DataFakerResource {
 
     private DataFakerConfiguration configuration;
-    static final String RABBITMQ = "rabbitmq";
-    static final String INFLUXDB = "influxdb";
+    private Environment env;
 
-    public DataFakerResource(DataFakerConfiguration configuration) {
+    static final String DEFAULT_TEMPLATE = "[{\"name\":\"my_time_series\",\"points\":[[{{time}},\"{{status}}\"]],\"columns\":[\"time\", \"status\"]}]";
+
+    public DataFakerResource(DataFakerConfiguration configuration, Environment env) {
         this.configuration = configuration;
+        this.env = env;
     }
 
     @POST
     public void generateData(@DefaultValue("1") @QueryParam("repeat") int repeat,
                              @DefaultValue("db1") @QueryParam("dbname") String dbname,
-                             @DefaultValue(RABBITMQ) @QueryParam("sendto") String sendTo,
+                             @DefaultValue(MessagePublisherFactory.RABBITMQ) @QueryParam("sendto") String sendTo,
                              String jsonTemplate) throws Exception
     {
+        if (jsonTemplate == null || jsonTemplate.equals(""))
+            jsonTemplate = DEFAULT_TEMPLATE;
+
         MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile(new StringReader(jsonTemplate), "example");
+        Mustache mustache = mf.compile(new StringReader(jsonTemplate), "data-faker-compiler");
 
         for (int i=0; i< repeat; i++) {
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new Scope()).flush();
 
-            if (sendTo.equals(RABBITMQ))
-                RabbitmqManager.getInstance().publishMessage(configuration, dbname, writer.toString());
+            MessagePublisherFactory.getPublisher(sendTo).
+                        publishMessage(configuration, env, dbname, writer.toString());
         }
     }
 
