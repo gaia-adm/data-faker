@@ -7,7 +7,8 @@ Usage
 =====
 
 This service was built using [dropwizard](https://dropwizard.github.io/dropwizard/index.html)
-It exposes a single REST endpoint "fake-data", that accepts json template body with [mustache](https://github.com/spullara/mustache.java) parameters.
+It exposes a single REST endpoint "fake-data", that accepts json template body with [mustache](https://github.com/spullara/mustache.java) parameters, then it parse the template replacing mustache parameters 
+with real values and send the result to the endpoint supplied by "sendto" query param.
 
 Supported __mustache parameters__:
 
@@ -25,8 +26,10 @@ Supported __query parameters__:
 | sendto  | what is the target to send the data to. currently supported values are "influxdb" and "rabbitmq" (default is "rabbitmq") |
 
 Here is example for how to use it:
-```HTTP
-curl -H "Content-Type: application/json" -X POST -d '[{"name":"my_time_series","points":[[{{time}},"{{status}}"]],"columns":["time", "status"]}]' 'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'
+```
+curl -H "Content-Type: application/json" -X POST 
+-d '[{"name":"my_time_series","points":[[{{time}},"{{status}}"]],"columns":["time", "status"]}]'
+'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'
 ```
 
 Best way to run the service is using docker. In this example we link influxdb container with data-faker container
@@ -37,6 +40,8 @@ docker run -d -p 8080:8080 -p 8081:8081 --link influxdb:influxdb --name facker g
 
 data-faker ships with default configuration, here is an example how to override the configuration
 ```
-docker run -d -p 11000:8080 -p 11001:8081 --name facker3 gaiaadm/data-faker java -Ddw.rabbitmq.host=OTHERHOST -Ddw.influxdb.port=OTHERPORT -jar /data/target/data-faker-1.0-SNAPSHOT.jar server 
+docker run -d -p 11000:8080 -p 11001:8081 --name facker3 gaiaadm/data-faker 
+java -Ddw.rabbitmq.host=OTHERHOST -Ddw.influxdb.port=OTHERPORT 
+-jar /data/target/data-faker-1.0-SNAPSHOT.jar server 
 ```
 To find out what are the values you can override, check out ```RabbitmqConfiguration.java``` and ```InfluxdbConfiguration.java```
