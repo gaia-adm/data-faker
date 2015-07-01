@@ -34,7 +34,7 @@ public class InfluxDBManager implements MessagePublisher {
     }
 
     @Override
-    public void publishMessage(DataFakerConfiguration configuration, Environment env, String dbname, String message) throws Exception
+    public void publishMessage(DataFakerConfiguration configuration, Environment env, String dbname, String message)
     {
         init(configuration, env);
 
@@ -47,6 +47,7 @@ public class InfluxDBManager implements MessagePublisher {
         } else
         {
             System.err.println("Failed to post to InfluxDB: " + response.toString());
+            throw new RuntimeException("Failed to post to InfluxDB: " + response.toString());
         }
     }
 

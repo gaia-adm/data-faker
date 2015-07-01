@@ -7,6 +7,7 @@ import com.github.mustachejava.MustacheFactory;
 import io.dropwizard.setup.Environment;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -27,24 +28,32 @@ public class DataFakerResource {
     }
 
     @POST
-    public void generateData(@DefaultValue("1") @QueryParam("repeat") int repeat,
+    public Response generateData(@DefaultValue("1") @QueryParam("repeat") int repeat,
                              @DefaultValue("db1") @QueryParam("dbname") String dbname,
                              @DefaultValue(MessagePublisherFactory.RABBITMQ) @QueryParam("sendto") String sendTo,
                              String jsonTemplate) throws Exception
     {
-        if (jsonTemplate == null || jsonTemplate.equals(""))
-            jsonTemplate = DEFAULT_TEMPLATE;
+        try {
+            if (jsonTemplate == null || jsonTemplate.equals(""))
+                jsonTemplate = DEFAULT_TEMPLATE;
 
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile(new StringReader(jsonTemplate), "data-faker-compiler");
+            MustacheFactory mf = new DefaultMustacheFactory();
+            Mustache mustache = mf.compile(new StringReader(jsonTemplate), "data-faker-compiler");
 
-        for (int i=0; i< repeat; i++) {
-            StringWriter writer = new StringWriter();
-            mustache.execute(writer, new Scope()).flush();
+            for (int i = 0; i < repeat; i++) {
+                StringWriter writer = new StringWriter();
+                mustache.execute(writer, new Scope()).flush();
 
-            MessagePublisherFactory.getPublisher(sendTo).
+                MessagePublisherFactory.getPublisher(sendTo).
                         publishMessage(configuration, env, dbname, writer.toString());
+            }
         }
+        catch (Exception ex)
+        {
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
+        return Response.status(200).build();
     }
 
 }

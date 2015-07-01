@@ -48,6 +48,7 @@ public class RabbitmqManager implements MessagePublisher {
        catch (IOException ex)
        {
            System.err.println("Failed to send to Rabbitmq, why: " + ex.getMessage());
+           throw new RuntimeException("Failed to send to Rabbitmq, why: " + ex.getMessage());
        }
 
     }
