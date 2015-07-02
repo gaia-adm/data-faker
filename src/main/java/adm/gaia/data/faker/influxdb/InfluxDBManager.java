@@ -38,7 +38,7 @@ public class InfluxDBManager implements MessagePublisher {
     {
         init(configuration, env);
 
-        WebTarget webTarget = jerseyClient.target(influxDbBaseUrl + dbname + "/series" + influxDbQueryParams);
+        WebTarget webTarget = jerseyClient.target(influxDbBaseUrl + dbname + influxDbQueryParams);
         Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).
                 post(Entity.entity(message, MediaType.APPLICATION_JSON_TYPE));
 
@@ -63,10 +63,10 @@ public class InfluxDBManager implements MessagePublisher {
             InfluxDBConfiguration conf = configuration.getInfluxDBConfiguration();
             StringBuilder baseBuilder = new StringBuilder();
             influxDbBaseUrl = baseBuilder.append(conf.getProtocol()).append("://").append(conf.getHost()).append(":").
-                    append(conf.getPort()).append("/db/").toString();
+                    append(conf.getPort()).append("/write?db=").toString();
 
             StringBuilder paramsBuilder = new StringBuilder();
-            influxDbQueryParams = paramsBuilder.append("?u=").append(conf.getUsername()).append("&p=").append(conf.getPassword()).toString();
+            influxDbQueryParams = paramsBuilder.append("&u=").append(conf.getUsername()).append("&p=").append(conf.getPassword()).toString();
         }
         lock.unlock();
     }

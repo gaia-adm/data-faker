@@ -20,7 +20,7 @@ public class DataFakerResource {
     private DataFakerConfiguration configuration;
     private Environment env;
 
-    static final String DEFAULT_TEMPLATE = "[{\"name\":\"my_time_series\",\"points\":[[{{time}},\"{{status}}\"]],\"columns\":[\"time\", \"status\"]}]";
+    static final String DEFAULT_TEMPLATE = "my_time_series,status={{status}} value=92 {{time}}";
 
     public DataFakerResource(DataFakerConfiguration configuration, Environment env) {
         this.configuration = configuration;
