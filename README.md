@@ -1,3 +1,5 @@
+CircleCI build status: [![Circle CI](https://circleci.com/gh/gaia-adm/data-faker.svg?style=svg)](https://circleci.com/gh/gaia-adm/data-faker)
+
 Motivation
 ==========
 
