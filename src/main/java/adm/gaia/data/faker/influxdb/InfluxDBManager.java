@@ -40,7 +40,7 @@ public class InfluxDBManager implements MessagePublisher {
 
         WebTarget webTarget = jerseyClient.target(influxDbBaseUrl + dbname + influxDbQueryParams);
         Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).
-                post(Entity.entity(message, MediaType.APPLICATION_JSON_TYPE));
+                post(Entity.entity(message, MediaType.TEXT_PLAIN_TYPE));
 
         if (response.getStatus() == 200) {
             System.out.println("[x] Sent '" + message + "' to influxdb");
