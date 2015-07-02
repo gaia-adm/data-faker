@@ -43,7 +43,7 @@ public class InfluxDBManager implements MessagePublisher {
                 post(Entity.entity(message, MediaType.TEXT_PLAIN_TYPE));
 
         if (response.getStatus() == 200) {
-            System.out.println("[x] Sent '" + message + "' to influxdb");
+            System.out.println("[x] Sent '" + message + "' to influxdb ");
         } else
         {
             System.err.println("Failed to post to InfluxDB: " + response.toString());
