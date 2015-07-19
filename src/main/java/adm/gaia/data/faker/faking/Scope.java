@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class Scope {
 
-    static final String[] STATUS_ARR = {"new", "in progress", "done"};
+    static final String[] STATUS_ARR = {"'new'", "'in progress'", "'done'"};
     public String getStatus()
     {
         Random r = new Random();
