@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class Scope {
 
-    static final String[] STATUS_ARR = {"'new'", "'in progress'", "'done'"};
+    static final String[] STATUS_ARR = {"new", "inprogress", "done"};
     public String getStatus()
     {
         Random r = new Random();
@@ -16,6 +16,6 @@ public class Scope {
 
     public long getTime()
     {
-        return System.currentTimeMillis();
+        return System.nanoTime();
     }
 }
