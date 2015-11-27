@@ -12,11 +12,9 @@ dependencies:
     - docker build -t gaiaadm/data-faker .
 test:
   override:
-    - docker run -d -p 8083:8083 -p 8086:8086 -e PRE_CREATE_DB="db1" --name influxdb tutum/influxdb
-    - docker run -d -p 8080:8080 -p 8081:8081 --link influxdb:influxdb --name faker gaiaadm/data-faker:$BUILD_TAG; sleep 10
-    - "curl -X POST 'http://localhost:8080/fake-data?repeat=2&sendto=influxdb'"
-    - sleep 10
-    - "curl -G 'http://localhost:8086/query?db=db1&u=root&p=root' --data-urlencode 'q=select * from my_time_series limit 1' | grep 'status'"
+    - docker run -d -p 5673:5672 -p 15673:15672 -e RABBITMQ_PASS="mypass" --name rabbitmq tutum/rabbitmq
+    - docker run -d -p 8080:8080 -p 8081:8081 --link rabbitmq:rabbitmq --name faker gaiaadm/data-faker:$CIRCLE_BUILD_NUM java -Ddw.rabbitmq.username=admin -Ddw.rabbitmq.password=mypass -jar /data/target/data-faker-1.0-SNAPSHOT.jar server; sleep 5
+    - "curl -X POST 'http://localhost:8080/fake-data?repeat=2&sendto=rabbitmq'"
 deployment:
   hub:
     branch: master

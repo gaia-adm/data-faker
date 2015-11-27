@@ -42,11 +42,12 @@ public class DataFakerResource {
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile(new StringReader(jsonTemplate), "data-faker-compiler");
 
+            configuration.getRabbitmqConfiguration().setRoutingKey(queueName);
+
             for (int i = 0; i < repeat; i++) {
                 StringWriter writer = new StringWriter();
                 mustache.execute(writer, new Scope()).flush();
 
-                configuration.getRabbitmqConfiguration().setRoutingKey(queueName);
                 MessagePublisherFactory.getPublisher(sendTo).
                         publishMessage(configuration, env, dbname, writer.toString());
             }
