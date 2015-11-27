@@ -10,6 +10,7 @@ dependencies:
     - docker cp build-cont:/usr/local/gaia/target/data-faker-1.0-SNAPSHOT.jar ./target
     - cp Dockerfile.run Dockerfile
     - docker build -t gaiaadm/data-faker .
+    - docker tag gaiaadm/data-faker gaiaadm/data-faker:$CIRCLE_BUILD_NUM
 test:
   override:
     - docker run -d -p 5673:5672 -p 15673:15672 -e RABBITMQ_PASS="mypass" --name rabbitmq tutum/rabbitmq
