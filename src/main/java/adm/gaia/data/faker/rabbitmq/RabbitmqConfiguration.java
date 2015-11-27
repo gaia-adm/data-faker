@@ -11,11 +11,8 @@ import javax.validation.constraints.Min;
  */
 public class RabbitmqConfiguration {
 
-    /**
-     * The server-side consumer's queue that provides point-to-point semantics for stock requests.
-     */
-    @JsonProperty
-    private String queueName = "events-indexer";
+    //Default queue name
+    public final static String DEFAULT_QUEUE_NAME = "events-indexer";
 
     /**
      * Key that clients will use to send to send events
@@ -23,7 +20,7 @@ public class RabbitmqConfiguration {
      * use the default exchange ("") that by default bind the routingKey to the queue with the same name
      */
     @JsonProperty
-    private String routingKey = queueName;
+    private String routingKey = DEFAULT_QUEUE_NAME;
 
     @JsonProperty
     private String host = "rabbitmq";//"192.168.59.103";
@@ -55,12 +52,12 @@ public class RabbitmqConfiguration {
         return password;
     }
 
-
-    public String getQueueName() {
-        return queueName;
-    }
-
     public String getRoutingKey() {
         return routingKey;
+    }
+
+    public void setRoutingKey(String routingKey)
+    {
+        this.routingKey = routingKey;
     }
 }

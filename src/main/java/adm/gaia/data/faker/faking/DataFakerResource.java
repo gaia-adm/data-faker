@@ -1,6 +1,7 @@
 package adm.gaia.data.faker.faking;
 
 import adm.gaia.data.faker.DataFakerConfiguration;
+import adm.gaia.data.faker.rabbitmq.RabbitmqConfiguration;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -31,6 +32,7 @@ public class DataFakerResource {
     public Response generateData(@DefaultValue("1") @QueryParam("repeat") int repeat,
                              @DefaultValue("db1") @QueryParam("dbname") String dbname,
                              @DefaultValue(MessagePublisherFactory.RABBITMQ) @QueryParam("sendto") String sendTo,
+                             @DefaultValue(RabbitmqConfiguration.DEFAULT_QUEUE_NAME) @QueryParam("queuename") String queueName,
                              String jsonTemplate) throws Exception
     {
         try {
@@ -44,6 +46,7 @@ public class DataFakerResource {
                 StringWriter writer = new StringWriter();
                 mustache.execute(writer, new Scope()).flush();
 
+                configuration.getRabbitmqConfiguration().setRoutingKey(queueName);
                 MessagePublisherFactory.getPublisher(sendTo).
                         publishMessage(configuration, env, dbname, writer.toString());
             }
