@@ -7,7 +7,8 @@ dependencies:
     - cp Dockerfile.build Dockerfile
     - docker build -t build-img .
     - docker create --name build-cont build-img
-    - docker cp build-cont:/usr/local/gaia/target/data-faker-1.0-SNAPSHOT.jar ./target
+    - mkdir -p ./target
+    - docker cp build-cont:/usr/local/gaia/target/data-faker-1.0-SNAPSHOT.jar ./target/data-faker-1.0-SNAPSHOT.jar
     - cp Dockerfile.run Dockerfile
     - docker build -t gaiaadm/data-faker .
     - docker tag gaiaadm/data-faker gaiaadm/data-faker:$CIRCLE_BUILD_NUM
