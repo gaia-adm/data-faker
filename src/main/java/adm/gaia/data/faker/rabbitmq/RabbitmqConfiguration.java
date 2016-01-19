@@ -11,19 +11,18 @@ import javax.validation.constraints.Min;
  */
 public class RabbitmqConfiguration {
 
-    //Default queue name
-    public final static String DEFAULT_QUEUE_NAME = "events-indexer";
-
     /**
      * Key that clients will use to send to send events
-     * Should be the same name as the queue since we use default RabbitMQ binding and expect the producers to
-     * use the default exchange ("") that by default bind the routingKey to the queue with the same name
      */
     @JsonProperty
-    private String routingKey = DEFAULT_QUEUE_NAME;
+    private String routingKey = "event.1234.datasource.datatype";
 
     @JsonProperty
     private String host = "rabbitmq";//"192.168.59.103";
+
+    //exchange name
+    @JsonProperty
+    private String exchangeName = "events-to-index";
 
     @Min(1)
     @Max(65535)
@@ -60,4 +59,14 @@ public class RabbitmqConfiguration {
     {
         this.routingKey = routingKey;
     }
+
+    public String getExchangeName() {
+        return exchangeName;
+    }
+
+    public void setExchangeName(String exchangeName) {
+        this.exchangeName = exchangeName;
+    }
+
+
 }

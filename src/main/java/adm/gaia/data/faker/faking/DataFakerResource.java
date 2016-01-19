@@ -32,17 +32,23 @@ public class DataFakerResource {
     public Response generateData(@DefaultValue("1") @QueryParam("repeat") int repeat,
                              @DefaultValue("db1") @QueryParam("dbname") String dbname,
                              @DefaultValue(MessagePublisherFactory.RABBITMQ) @QueryParam("sendto") String sendTo,
-                             @DefaultValue(RabbitmqConfiguration.DEFAULT_QUEUE_NAME) @QueryParam("queuename") String queueName,
+                             @QueryParam("exchangename") String exchangeName, @QueryParam("routingkey") String routingKey,
                              String jsonTemplate) throws Exception
     {
         try {
             if (jsonTemplate == null || jsonTemplate.equals(""))
                 jsonTemplate = DEFAULT_TEMPLATE;
 
+            if (exchangeName != null)
+                configuration.getRabbitmqConfiguration().setExchangeName(exchangeName);
+
+            if (routingKey != null)
+                configuration.getRabbitmqConfiguration().setRoutingKey(routingKey);
+
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile(new StringReader(jsonTemplate), "data-faker-compiler");
 
-            configuration.getRabbitmqConfiguration().setRoutingKey(queueName);
+
 
             for (int i = 0; i < repeat; i++) {
                 StringWriter writer = new StringWriter();

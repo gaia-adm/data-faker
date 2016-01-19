@@ -30,7 +30,6 @@ public class RabbitmqManager implements MessagePublisher {
         return _instance;
     }
 
-    @Override
     public void publishMessage(DataFakerConfiguration configuration, Environment env, String dbname, String message) throws Exception
     {
        Connection conn = getConnection(configuration);
@@ -42,7 +41,7 @@ public class RabbitmqManager implements MessagePublisher {
        propsBuilder.headers(map);
 
        try {
-           producerChannel.basicPublish("", configuration.getRabbitmqConfiguration().getRoutingKey(), propsBuilder.build(), message.getBytes());
+           producerChannel.basicPublish(configuration.getRabbitmqConfiguration().getExchangeName(), configuration.getRabbitmqConfiguration().getRoutingKey(), propsBuilder.build(), message.getBytes());
            System.out.println("[x] Sent '" + message + "' to rabbitmq");
        }
        catch (IOException ex)
