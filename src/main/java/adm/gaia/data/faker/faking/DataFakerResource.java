@@ -14,6 +14,7 @@ import java.io.StringWriter;
 
 /**
  * Created by tsadok on 01/07/2015.
+ *
  */
 @Path("/fake-data")
 public class DataFakerResource {
