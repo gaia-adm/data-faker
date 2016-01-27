@@ -40,8 +40,13 @@ public class DataFakerResource {
             if (jsonTemplate == null || jsonTemplate.equals(""))
                 jsonTemplate = DEFAULT_TEMPLATE;
 
-            if (exchangeName != null)
+            if (exchangeName != null) {
                 configuration.getRabbitmqConfiguration().setExchangeName(exchangeName);
+
+                if (exchangeName.equals("EMPTYSTRING")) {
+                    configuration.getRabbitmqConfiguration().setExchangeName("");
+                }
+            }
 
             if (routingKey != null)
                 configuration.getRabbitmqConfiguration().setRoutingKey(routingKey);
